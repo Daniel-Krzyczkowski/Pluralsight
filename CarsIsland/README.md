@@ -4,6 +4,9 @@
 #### Cars Island Web API
 [![Build Status](https://dev.azure.com/devisland/Cars%20Island/_apis/build/status/CI-cars-island-web-api-github?branchName=master)](https://dev.azure.com/devisland/Cars%20Island/_build/latest?definitionId=28&branchName=master)
 
+#### Cars Island Web App
+[![Build Status](https://dev.azure.com/devisland/Cars%20Island/_apis/build/status/CI-cars-island-web-app-github?branchName=master)](https://dev.azure.com/devisland/Cars%20Island/_build/latest?definitionId=29&branchName=master)
+
 <p align="center">
 <img src="https://raw.githubusercontent.com/Daniel-Krzyczkowski/Pluralsight/master/CarsIsland/images/cars-island-azure-devops-dashboard.png?raw=true" alt="Image not found"/>
 </p>
