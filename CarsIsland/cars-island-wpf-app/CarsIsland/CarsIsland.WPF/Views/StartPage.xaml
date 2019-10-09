@@ -1,0 +1,33 @@
+﻿<Page x:Class="CarsIsland.WPF.Views.StartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CarsIsland.WPF.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="StartPage"
+      DataContext="{Binding StartPageViewModel, Source={StaticResource ViewModelLocator}}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="170*"/>
+            <RowDefinition Height="322*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <ImageBrush Stretch="UniformToFill" ImageSource="/CarsIsland.WPF;component/Assets/start-page-background.jpg"/>
+        </Grid.Background>
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="0, 28, 0, 0" >
+            <TextBlock Text="CARS ISLAND" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Foreground="#FF0B881F" FontSize="40"/>
+            <Image Source="/CarsIsland.WPF;component/Assets/car-icon.png" Width="80" Height="80" />
+        </StackPanel>
+        <Button Width="100" Height="50" Content="Cars" Command="{Binding NavigateToCarsViewCommand}" Grid.Column="0" Grid.Row="1" Background="#395628" Foreground="White" FontSize="14" FontWeight="Bold" BorderBrush="#FF0298B0" BorderThickness="2"/>
+        <Button Width="100" Height="50" Content="Contacts" Command="{Binding NavigateToContactsViewCommand}" Grid.Column="1" Grid.Row="1" Background="#395628" Foreground="White" FontSize="14" FontWeight="Bold" BorderBrush="#FF0298B0" BorderThickness="2"/>
+        <Button Width="100" Height="50" Content="Locations" Command="{Binding NavigateToLocationsViewCommand}" Grid.Column="2" Grid.Row="1" Background="#395628" Foreground="White" FontSize="14" FontWeight="Bold" BorderBrush="#FF0298B0" BorderThickness="2"/>
+    </Grid>
+</Page>

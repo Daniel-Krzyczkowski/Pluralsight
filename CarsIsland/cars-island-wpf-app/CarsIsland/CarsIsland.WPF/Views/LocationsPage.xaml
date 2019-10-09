@@ -1,0 +1,55 @@
+﻿<Page x:Class="CarsIsland.WPF.Views.LocationsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CarsIsland.WPF.Views"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="LocationsPage"
+      DataContext="{Binding LocationsPageViewModel, Source={StaticResource ViewModelLocator}}">
+    <Page.Background>
+        <ImageBrush Stretch="UniformToFill" ImageSource="/CarsIsland.WPF;component/Assets/main-page-background.jpg"/>
+    </Page.Background>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Locations" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" FontWeight="Bold" Foreground="#FF0B881F" Margin="20, 0, 0, 0"/>
+        <StackPanel Grid.Row="1" Margin="10">
+            <Grid Grid.Row="1" Height="20" VerticalAlignment="Top" Background="#FFC8DFD0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="160"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Address" FontWeight="Bold" Grid.Column="0" HorizontalAlignment="Left" Margin="4, 0, 0, 0"/>
+                <TextBlock Text="City" FontWeight="Bold" Grid.Column="1" HorizontalAlignment="Left" Margin="4, 0, 0, 0"/>
+                <TextBlock Text="Country" FontWeight="Bold" Grid.Column="2" HorizontalAlignment="Left" Margin="4, 0, 0, 0"/>
+                <TextBlock Text="Zip code" FontWeight="Bold" Grid.Column="3" HorizontalAlignment="Left" Margin="4, 0, 0, 0"/>
+            </Grid>
+            <ListView Name="locations" Grid.Row="1" ItemsSource="{Binding LocationsList}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="160"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Address}" Grid.Column="0" HorizontalAlignment="Left" />
+                            <TextBlock Text="{Binding City}" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding Country}" Grid.Column="2" HorizontalAlignment="Left" />
+                            <TextBlock Text="{Binding ZipCode}" Grid.Column="3" HorizontalAlignment="Left" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</Page>

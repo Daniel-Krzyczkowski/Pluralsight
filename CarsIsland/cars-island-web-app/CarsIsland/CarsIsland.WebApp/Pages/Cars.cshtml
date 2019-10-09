@@ -1,0 +1,51 @@
+﻿@page
+@model CarsIsland.WebApp.Pages.CarsModel
+@{
+    ViewData["Title"] = "Cars";
+}
+
+<h1>@ViewData["Title"]</h1>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <br />
+    <br />
+    <form>
+        <p>
+            Title: <input type="text" asp-for="SearchString" />
+            <input type="submit" value="Filter" />
+        </p>
+    </form>
+    <br/>
+    <table class="table">
+        <tr>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Cost</th>
+            <th>Location</th>
+        </tr>
+        @foreach (var item in Model.CarsList)
+        {
+            <tr>
+                <td>
+                    <a asp-page="./CarDetails" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Brand)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>
+                <td>
+                   @item.Location
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
+

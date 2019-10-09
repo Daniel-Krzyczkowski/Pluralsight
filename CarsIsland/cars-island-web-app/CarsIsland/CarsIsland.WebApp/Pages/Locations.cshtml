@@ -1,0 +1,34 @@
+﻿@page
+@model LocationsModel
+@{
+    ViewData["Title"] = "Locations";
+}
+    <h1>@ViewData["Title"]</h1>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <br />
+    <br />
+    <table class="table">
+        <tr>
+            <th>City</th>
+            <th>Country</th>
+        </tr>
+        @foreach (var item in Model.LocationsList)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country)
+        </td>
+    </tr>
+        }
+    </table>
+</body>
+</html>

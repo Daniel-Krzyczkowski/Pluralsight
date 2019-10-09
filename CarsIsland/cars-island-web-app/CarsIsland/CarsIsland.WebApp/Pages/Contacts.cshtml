@@ -1,0 +1,46 @@
+﻿@page
+@model ContactsModel
+@{
+    ViewData["Title"] = "Contacts";
+}
+<h1>@ViewData["Title"]</h1>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <br />
+    <br />
+    <table class="table">
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Location</th>
+            <th>Phone</th>
+            <th>E-mail</th>
+        </tr>
+        @foreach (var item in Model.ContactsList)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @item.Location
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

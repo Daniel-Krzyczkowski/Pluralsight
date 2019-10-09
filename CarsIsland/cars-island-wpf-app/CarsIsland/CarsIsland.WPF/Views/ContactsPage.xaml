@@ -1,0 +1,58 @@
+﻿<Page x:Class="CarsIsland.WPF.Views.ContactsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CarsIsland.WPF.Views"
+      mc:Ignorable="d"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ContactsPage"
+      DataContext="{Binding ContactsPageViewModel, Source={StaticResource ViewModelLocator}}">
+    <Page.Background>
+        <ImageBrush Stretch="UniformToFill" ImageSource="/CarsIsland.WPF;component/Assets/main-page-background.jpg"/>
+    </Page.Background>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="13*"/>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Contacts details" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="24" FontWeight="Bold" Foreground="#FF0B881F" Margin="20, 0, 0, 0"/>
+        <StackPanel Grid.Row="1" Margin="10">
+            <Grid Grid.Row="1" Height="20" VerticalAlignment="Top" Background="#FFC8DFD0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="160"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="First name" FontWeight="Bold" Grid.Column="0" HorizontalAlignment="Left" Margin="4, 0, 0, 0"/>
+                <TextBlock Text="Last name" FontWeight="Bold" Grid.Column="1" HorizontalAlignment="Left" Margin="4, 0, 0, 0"/>
+                <TextBlock Text="Location" FontWeight="Bold" Grid.Column="2" HorizontalAlignment="Left" Margin="4, 0, 0, 0"/>
+            </Grid>
+            <ListView Name="contacts" Grid.Row="1" ItemsSource="{Binding ContactsList}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectedContactPerson}"  
+                             CommandParameter="{Binding SelectedItem, ElementName=contacts}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="160"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding FirstName}" Grid.Column="0" HorizontalAlignment="Left" />
+                            <TextBlock Text="{Binding LastName}" Grid.Column="1" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding Location}" Grid.Column="2" HorizontalAlignment="Left" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</Page>

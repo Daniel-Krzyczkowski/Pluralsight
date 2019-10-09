@@ -1,0 +1,27 @@
+﻿@page
+@model CarsIsland.WebApp.Pages.CarDetailsModel
+@{
+    ViewData["Title"] = "CarDetails";
+}
+
+<h1>CarDetails</h1>
+<br />
+
+<table border="0">
+    <tr>
+        <td>
+            <p><b>Brand:</b> @Model.FoundCar.Brand</p>
+            <br />
+            <p><b>Model:</b> @Model.FoundCar.Model</p>
+            <br />
+            <p><b>Cost:</b> @Model.FoundCar.Cost</p>
+            <br />
+            <p><b>Location:</b> @Model.FoundCar.Location.ToString()</p>
+            <br />
+            <p><b>Contact person:</b> @Model.ContactPerson.ToString()</p>
+        </td>
+        <td>
+            <img src=@Model.FoundCar.ImageUrl alt="Car image" />
+        </td>
+    </tr>
+</table>
