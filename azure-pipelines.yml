@@ -19,7 +19,7 @@ variables:
 
 steps:
     
-- script: dotnet build 'CarsIsland/CarsIsland.WebApp/CarsIsland.WebApp.csproj' --configuration $(buildConfiguration)
+- script: dotnet build 'CarsIsland/cars-island-web-app/CarsIsland/CarsIsland.WebApp/CarsIsland.WebApp.csproj' --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
