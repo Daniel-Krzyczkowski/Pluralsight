@@ -175,7 +175,7 @@ namespace AzureMediaServicesSamples.ConsoleApp
             {
                 await azureMediaServicesManager.CleanupLiveEventAndOutputAsync(liveEventName);
 
-                await azureMediaServicesManager.CleanupLocatorandAssetAsync(streamingLocatorName, assetName);
+                await azureMediaServicesManager.CleanupLocatorAndAssetAsync(streamingLocatorName, assetName);
 
                 await azureMediaServicesManager.StopStreamingEndpointAsync(assetName, streamingEndpointName);
             }

@@ -184,7 +184,7 @@ namespace AzureMediaServicesSamples.SDK
             }
         }
 
-        public async Task CleanupLocatorandAssetAsync(string streamingLocatorName, string assetName)
+        public async Task CleanupLocatorAndAssetAsync(string streamingLocatorName, string assetName)
         {
             try
             {
@@ -196,7 +196,7 @@ namespace AzureMediaServicesSamples.SDK
             }
             catch (ApiErrorException e)
             {
-                Console.WriteLine("CleanupLocatorandAssetAsync -- Hit ApiErrorException");
+                Console.WriteLine("CleanupLocatorAndAssetAsync -- Hit ApiErrorException");
                 Console.WriteLine($"\tCode: {e.Body.Error.Code}");
                 Console.WriteLine($"\tCode: {e.Body.Error.Message}");
                 Console.WriteLine();
