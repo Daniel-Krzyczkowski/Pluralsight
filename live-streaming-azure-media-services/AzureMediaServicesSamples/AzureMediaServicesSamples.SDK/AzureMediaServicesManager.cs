@@ -202,5 +202,18 @@ namespace AzureMediaServicesSamples.SDK
                 Console.WriteLine();
             }
         }
+
+        public async Task StopStreamingEndpointAsync(string assetName, string streamingEndpointName)
+        {
+            // Get the default Streaming Endpoint on the account
+            StreamingEndpoint streamingEndpoint = await _azureMediaServicesClient.StreamingEndpoints.GetAsync(_config.ResourceGroup, _config.AccountName, streamingEndpointName);
+
+            // If it's running, Stop it. 
+            if (streamingEndpoint.ResourceState == StreamingEndpointResourceState.Running)
+            {
+                Console.WriteLine("Streaming Endpoint was running, stopping now...");
+                await _azureMediaServicesClient.StreamingEndpoints.StopAsync(_config.ResourceGroup, _config.AccountName, streamingEndpointName);
+            }
+        }
     }
 }
