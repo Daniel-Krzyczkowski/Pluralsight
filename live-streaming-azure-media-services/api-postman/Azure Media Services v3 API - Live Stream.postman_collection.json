@@ -62,7 +62,10 @@
 							"description": "Normally this is https://management.core.windows.net/ \nIt can vary based on the specific Azure Cloud you are using. \nFor Gov Cloud, China, Germany or other soverign cloud, please check the appropriate Azure management API endpoint URL settings in the documentation. ",
 							"type": "text"
 						}
-					]
+					],
+					"options": {
+						"urlencoded": {}
+					}
 				},
 				"url": {
 					"raw": "https://login.microsoftonline.com/:aadTenantDomain/oauth2/token",
@@ -79,8 +82,10 @@
 					],
 					"variable": [
 						{
+							"id": "4910309c-cb41-45c5-8091-e7e974dafeff",
 							"key": "aadTenantDomain",
-							"value": "{{aadTenantDomain}}"
+							"value": "{{aadTenantDomain}}",
+							"type": "string"
 						}
 					]
 				}
@@ -136,7 +141,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"location\": \"{{location}}\",\r\n    \"properties\": {\r\n        \"description\": \"Simple Live Event using RTMP with 2-second keyframe interval and no ip restriction\",\r\n        \"vanityUrl\": true,\r\n        \"streamOptions\": [\r\n            \"LowLatency\"\r\n        ],\r\n        \"input\": {\r\n            \"streamingProtocol\": \"RTMP\",\r\n            \"accessToken\": \"3075cc04-62ab-4b37-9a4e-70fdb4521458\",\"keyFrameIntervalDuration\": \"PT2S\",\r\n            \"accessControl\": {\r\n                \"ip\": {\r\n                    \"allow\": [{\r\n                        \"name\": \"AllowAll\",\r\n                        \"address\": \"0.0.0.0\",\r\n                        \"subnetPrefixLength\": 0\r\n                    }]\r\n                }\r\n            }\r\n        },\r\n        \"preview\": {\r\n            \"accessControl\": {\r\n                \"ip\": {\r\n                    \"allow\": [{\r\n                        \"name\": \"AllowAll\",\r\n                        \"address\": \"0.0.0.0\",\r\n                        \"subnetPrefixLength\": 0\r\n                    }]\r\n                }\r\n            }\r\n        },\r\n        \"encoding\": {\r\n            \"encodingType\": \"None\",\r\n            \"presetName\": \"\"\r\n        }\r\n    }\r\n}"
+					"raw": "{\r\n    \"location\": \"{{location}}\",\r\n    \"properties\": {\r\n        \"description\": \"Simple Live Event using RTMP with 2-second keyframe interval and no ip restriction\",\r\n        \"vanityUrl\": true,\r\n        \"streamOptions\": [\r\n            \"LowLatency\"\r\n        ],\r\n        \"input\": {\r\n            \"streamingProtocol\": \"RTMP\",\r\n            \"accessToken\": \"3075cc04-62ab-4b37-9a4e-70fdb4521458\",\"keyFrameIntervalDuration\": \"PT2S\",\r\n            \"accessControl\": {\r\n                \"ip\": {\r\n                    \"allow\": [{\r\n                        \"name\": \"AllowAll\",\r\n                        \"address\": \"0.0.0.0\",\r\n                        \"subnetPrefixLength\": 0\r\n                    }]\r\n                }\r\n            }\r\n        },\r\n        \"preview\": {\r\n            \"accessControl\": {\r\n                \"ip\": {\r\n                    \"allow\": [{\r\n                        \"name\": \"AllowAll\",\r\n                        \"address\": \"0.0.0.0\",\r\n                        \"subnetPrefixLength\": 0\r\n                    }]\r\n                }\r\n            }\r\n        },\r\n        \"encoding\": {\r\n            \"encodingType\": \"None\",\r\n            \"presetName\": \"\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName?api-version={{api-version}}&autoStart={{autoStart}}",
@@ -171,19 +179,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "liveEventName",
-							"value": "{{liveEventName}}"
+							"value": "{{liveEventName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -238,7 +250,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"properties\": {\r\n    \"description\": \"A documentary showing the ascent of Mount Logan\",\r\n    \"alternateId\": \"344cb707-e54b-4992-9278-0795dd271459\",\r\n    \"storageAccountName\": \"{{storageAccountName}}\",\r\n    \"container\": \"test-live\"\r\n  }\r\n}"
+					"raw": "{\r\n  \"properties\": {\r\n    \"description\": \"A documentary showing the ascent of Mount Logan\",\r\n    \"alternateId\": \"344cb707-e54b-4992-9278-0795dd271459\",\r\n    \"storageAccountName\": \"{{storageAccountName}}\",\r\n    \"container\": \"test-live\"\r\n  }\r\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/assets/:assetName?api-version={{api-version}}",
@@ -269,19 +284,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "assetName",
-							"value": "{{assetName}}"
+							"value": "{{assetName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -314,7 +333,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"properties\": {\r\n    \"noEncryption\": {\r\n      \"enabledProtocols\": {\r\n        \"download\": true,\r\n        \"dash\": true,\r\n        \"hls\": true,\r\n        \"smoothStreaming\": true\r\n      }\r\n    }\r\n  }\r\n}"
+					"raw": "{\r\n  \"properties\": {\r\n    \"noEncryption\": {\r\n      \"enabledProtocols\": {\r\n        \"download\": true,\r\n        \"dash\": true,\r\n        \"hls\": true,\r\n        \"smoothStreaming\": true\r\n      }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/streamingPolicies/:streamingPolicyName?api-version={{api-version}}",
@@ -345,19 +367,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "streamingPolicyName",
-							"value": "{{streamingPolicyName}}"
+							"value": "{{streamingPolicyName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -390,7 +416,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"properties\": {\r\n    \"streamingPolicyName\": \"testStreamingPolicy1\",\r\n    \"assetName\": \"testAsset1\",\r\n    \"contentKeys\": [],\r\n    \"filters\": []\r\n }\r\n}"
+					"raw": "{\r\n  \"properties\": {\r\n    \"streamingPolicyName\": \"testStreamingPolicy1\",\r\n    \"assetName\": \"testAsset1\",\r\n    \"contentKeys\": [],\r\n    \"filters\": []\r\n }\r\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/streamingLocators/:streamingLocatorName?api-version={{api-version}}",
@@ -421,19 +450,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "streamingLocatorName",
-							"value": "{{streamingLocatorName}}"
+							"value": "{{streamingLocatorName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -466,7 +499,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"location\": \"{{location}}\",\r\n  \"tags\": {\r\n    \"custom tag 1\": \"value 1\",\r\n    \"custom tag 2\": \"value 2\"\r\n  },\r\n  \"properties\": {\r\n    \"description\": \"test Streaming Endpoint\",\r\n    \"scaleUnits\": 0,\r\n    \"availabilitySetName\": \"availableset\",\r\n    \"accessControl\": {\r\n      \"akamai\": {\r\n        \"akamaiSignatureHeaderAuthenticationKeyList\": [\r\n          {\r\n            \"identifier\": \"id1\",\r\n            \"expiration\": \"2029-12-31T16:00:00-08:00\",\r\n            \"base64Key\": \"dGVzdGlkMQ==\"\r\n          },\r\n          {\r\n            \"identifier\": \"id2\",\r\n            \"expiration\": \"2030-12-31T16:00:00-08:00\",\r\n            \"base64Key\": \"dGVzdGlkMQ==\"\r\n          }\r\n        ]\r\n      },\r\n      \"ip\": {\r\n        \"allow\": [\r\n          {\r\n            \"name\": \"AllowedIp\",\r\n            \"address\": \"0.0.0.0\"\r\n          }\r\n        ]\r\n      }\r\n    },\r\n    \"cdnEnabled\": false\r\n  }\r\n}"
+					"raw": "{\r\n  \"location\": \"{{location}}\",\r\n  \"tags\": {\r\n    \"custom tag 1\": \"value 1\",\r\n    \"custom tag 2\": \"value 2\"\r\n  },\r\n  \"properties\": {\r\n    \"description\": \"test Streaming Endpoint\",\r\n    \"scaleUnits\": 0,\r\n    \"availabilitySetName\": \"availableset\",\r\n    \"accessControl\": {\r\n      \"akamai\": {\r\n        \"akamaiSignatureHeaderAuthenticationKeyList\": [\r\n          {\r\n            \"identifier\": \"id1\",\r\n            \"expiration\": \"2029-12-31T16:00:00-08:00\",\r\n            \"base64Key\": \"dGVzdGlkMQ==\"\r\n          },\r\n          {\r\n            \"identifier\": \"id2\",\r\n            \"expiration\": \"2030-12-31T16:00:00-08:00\",\r\n            \"base64Key\": \"dGVzdGlkMQ==\"\r\n          }\r\n        ]\r\n      },\r\n      \"ip\": {\r\n        \"allow\": [\r\n          {\r\n            \"name\": \"AllowedIp\",\r\n            \"address\": \"0.0.0.0\"\r\n          }\r\n        ]\r\n      }\r\n    },\r\n    \"cdnEnabled\": false\r\n  }\r\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/streamingEndpoints/:streamingEndpointName?api-version={{api-version}}&autoStart={{autoStart}}",
@@ -501,19 +537,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "streamingEndpointName",
-							"value": "{{streamingEndpointName}}"
+							"value": "{{streamingEndpointName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -546,7 +586,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"properties\": {\r\n        \"description\": \"myOutputAsset\",\r\n        \"assetName\": \"testAsset1\",\r\n        \"archiveWindowLength\": \"PT5M\",\r\n        \"manifestName\": \"testmanifest\",\r\n        \"hls\": {\r\n          \"fragmentsPerTsSegment\": 1\r\n        }\r\n    }\r\n}"
+					"raw": "{\r\n    \"properties\": {\r\n        \"description\": \"myOutputAsset\",\r\n        \"assetName\": \"testAsset1\",\r\n        \"archiveWindowLength\": \"PT5M\",\r\n        \"manifestName\": \"testmanifest\",\r\n        \"hls\": {\r\n          \"fragmentsPerTsSegment\": 1\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName/liveOutputs/:liveOutputName?api-version={{api-version}}",
@@ -579,23 +622,28 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "liveEventName",
-							"value": "{{liveEventName}}"
+							"value": "{{liveEventName}}",
+							"type": "string"
 						},
 						{
 							"key": "liveOutputName",
-							"value": "{{liveOutputName}}"
+							"value": "{{liveOutputName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -656,19 +704,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "streamingLocatorName",
-							"value": "{{streamingLocatorName}}"
+							"value": "{{streamingLocatorName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -728,19 +780,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "liveEventName",
-							"value": "{{liveEventName}}"
+							"value": "{{liveEventName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -773,7 +829,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"removeOutputsOnStop\": true\n}"
+					"raw": "{\n    \"removeOutputsOnStop\": true\n}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName/stop?api-version={{api-version}}",
@@ -805,19 +864,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "liveEventName",
-							"value": "{{liveEventName}}"
+							"value": "{{liveEventName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -877,19 +940,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "liveEventName",
-							"value": "{{liveEventName}}"
+							"value": "{{liveEventName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -949,19 +1016,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "streamingLocatorName",
-							"value": "{{streamingLocatorName}}"
+							"value": "{{streamingLocatorName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -969,7 +1040,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete an Asset.",
+			"name": "Delete an Asset",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -1021,18 +1092,22 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
+							"type": "string",
 							"value": "{{subscriptionId}}"
 						},
 						{
 							"key": "resourceGroup",
+							"type": "string",
 							"value": "{{resourceGroup}}"
 						},
 						{
 							"key": "accountName",
+							"type": "string",
 							"value": "{{accountName}}"
 						},
 						{
 							"key": "assetName",
+							"type": "string",
 							"value": "{{assetName}}"
 						}
 					]
@@ -1094,19 +1169,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "streamingEndpointName",
-							"value": "{{streamingEndpointName}}"
+							"value": "{{streamingEndpointName}}",
+							"type": "string"
 						}
 					]
 				}
@@ -1166,19 +1245,23 @@
 					"variable": [
 						{
 							"key": "subscriptionId",
-							"value": "{{subscriptionId}}"
+							"value": "{{subscriptionId}}",
+							"type": "string"
 						},
 						{
 							"key": "resourceGroup",
-							"value": "{{resourceGroup}}"
+							"value": "{{resourceGroup}}",
+							"type": "string"
 						},
 						{
 							"key": "accountName",
-							"value": "{{accountName}}"
+							"value": "{{accountName}}",
+							"type": "string"
 						},
 						{
 							"key": "streamingEndpointName",
-							"value": "{{streamingEndpointName}}"
+							"value": "{{streamingEndpointName}}",
+							"type": "string"
 						}
 					]
 				}
