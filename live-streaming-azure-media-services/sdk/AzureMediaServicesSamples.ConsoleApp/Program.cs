@@ -80,7 +80,7 @@ namespace AzureMediaServicesSamples.ConsoleApp
 
                 // Get the input endpoint to configure the on premise encoder with
                 string ingestUrl = liveEvent.Input.Endpoints.First().Url;
-                Console.WriteLine($"The ingest url to configure the on premise encoder with:");
+                Console.WriteLine($"The ingest url to configure the on premise encoder (OBS Studio) with:");
                 Console.WriteLine($"\t{ingestUrl}");
                 Console.WriteLine();
 

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureMediaServicesSamples.ConsoleApp", "AzureMediaServicesSamples.ConsoleApp\AzureMediaServicesSamples.ConsoleApp.csproj", "{4EE5D440-93F0-4103-AA23-AE0734F3B37E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureMediaServicesSamples.ConsoleApp", "AzureMediaServicesSamples.ConsoleApp\AzureMediaServicesSamples.ConsoleApp.csproj", "{4EE5D440-93F0-4103-AA23-AE0734F3B37E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureMediaServicesSamples.SDK", "AzureMediaServicesSamples.SDK\AzureMediaServicesSamples.SDK.csproj", "{C0232D80-761F-4F3C-8E42-58F9061ED5B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureMediaServicesSamples.SDK", "AzureMediaServicesSamples.SDK\AzureMediaServicesSamples.SDK.csproj", "{C0232D80-761F-4F3C-8E42-58F9061ED5B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

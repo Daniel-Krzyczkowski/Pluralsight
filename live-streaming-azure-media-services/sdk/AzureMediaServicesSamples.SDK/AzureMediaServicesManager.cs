@@ -65,7 +65,7 @@ namespace AzureMediaServicesSamples.SDK
                 subnetPrefixLength: 0
             );
 
-            // Create the LiveEvent input IP access control.
+            // Create the LiveEvent input IP access control:
             LiveEventInputAccessControl liveEventInputAccess = new LiveEventInputAccessControl
             {
                 Ip = new IPAccessControl(
@@ -76,7 +76,7 @@ namespace AzureMediaServicesSamples.SDK
                     )
             };
 
-            // Create the LiveEvent Preview IP access control
+            // Create the LiveEvent Preview IP access control:
             LiveEventPreview liveEventPreview = new LiveEventPreview
             {
                 AccessControl = new LiveEventPreviewAccessControl(
@@ -99,7 +99,7 @@ namespace AzureMediaServicesSamples.SDK
                 description: "Sample LiveEvent for testing",
                 vanityUrl: false,
                 encoding: new LiveEventEncoding(
-                            // Set this to Standard to enable a transcoding LiveEvent, and None to enable a pass-through LiveEvent
+                            // Set this to Standard to enable a transcoding LiveEvent, and None to enable a pass-through LiveEvent:
                             encodingType: LiveEventEncodingType.None,
                             presetName: null
                         ),
@@ -111,7 +111,7 @@ namespace AzureMediaServicesSamples.SDK
                         // When using Low Latency mode, you must configure the Azure Media Player to use the 
                         // quick start hueristic profile or you won't notice the change. 
                         // In the AMP player client side JS options, set -  heuristicProfile: "Low Latency Heuristic Profile". 
-                        // To use low latency optimally, you should tune your encoder settings down to 1 second GOP size instead of 2 seconds.
+                        // To use low latency optimally, you should tune your encoder settings down to 1 second GOP size instead of 2 seconds:
                         StreamOptionsFlag.LowLatency
                 }
             );
@@ -121,18 +121,18 @@ namespace AzureMediaServicesSamples.SDK
             // When autostart is set to true, the Live Event will be started after creation. 
             // That means, the billing starts as soon as the Live Event starts running. 
             // You must explicitly call Stop on the Live Event resource to halt further billing.
-            // The following operation can sometimes take awhile. Be patient.
+            // The following operation can sometimes take awhile:
             return await _azureMediaServicesClient.LiveEvents.CreateAsync(_config.ResourceGroup, _config.AccountName, liveEventName, liveEvent, autoStart: true);
         }
 
         public async Task<StreamingLocator> CreateAssetAndLocatorAsync(string assetName, string streamingLocatorName)
         {
-            // Create an Asset for the LiveOutput to use
+            // Create an Asset for the LiveOutput to use:
             Console.WriteLine($"Creating an asset named {assetName}");
             Console.WriteLine();
             Asset asset = await _azureMediaServicesClient.Assets.CreateOrUpdateAsync(_config.ResourceGroup, _config.AccountName, assetName, new Asset());
 
-            // Create the StreamingLocator
+            // Create the StreamingLocator:
             Console.WriteLine($"Creating a streaming locator named {streamingLocatorName}");
             Console.WriteLine();
 
@@ -142,10 +142,10 @@ namespace AzureMediaServicesSamples.SDK
 
         public async Task<StreamingEndpoint> StartStreamingEndpointAsync(string assetName, string streamingEndpointName)
         {
-            // Get the default Streaming Endpoint on the account
+            // Get the default Streaming Endpoint on the account:
             StreamingEndpoint streamingEndpoint = await _azureMediaServicesClient.StreamingEndpoints.GetAsync(_config.ResourceGroup, _config.AccountName, streamingEndpointName);
 
-            // If it's not running, Start it. 
+            // If it's not running, start it:
             if (streamingEndpoint.ResourceState != StreamingEndpointResourceState.Running)
             {
                 Console.WriteLine("Streaming Endpoint was Stopped, restarting now..");
@@ -167,11 +167,11 @@ namespace AzureMediaServicesSamples.SDK
                 {
                     if (liveEvent.ResourceState == LiveEventResourceState.Running)
                     {
-                        // If the LiveEvent is running, stop it and have it remove any LiveOutputs
+                        // If the LiveEvent is running, stop it and have it remove any LiveOutputs:
                         await _azureMediaServicesClient.LiveEvents.StopAsync(_config.ResourceGroup, _config.AccountName, liveEventName, removeOutputsOnStop: true);
                     }
 
-                    // Delete the LiveEvent
+                    // Delete the LiveEvent:
                     await _azureMediaServicesClient.LiveEvents.DeleteAsync(_config.ResourceGroup, _config.AccountName, liveEventName);
                 }
             }
@@ -188,10 +188,10 @@ namespace AzureMediaServicesSamples.SDK
         {
             try
             {
-                // Delete the Streaming Locator
+                // Delete the Streaming Locator:
                 await _azureMediaServicesClient.StreamingLocators.DeleteAsync(_config.ResourceGroup, _config.AccountName, streamingLocatorName);
 
-                // Delete the Archive Asset
+                // Delete the Archive Asset:
                 await _azureMediaServicesClient.Assets.DeleteAsync(_config.ResourceGroup, _config.AccountName, assetName);
             }
             catch (ApiErrorException e)
@@ -205,10 +205,10 @@ namespace AzureMediaServicesSamples.SDK
 
         public async Task StopStreamingEndpointAsync(string assetName, string streamingEndpointName)
         {
-            // Get the default Streaming Endpoint on the account
+            // Get the default Streaming Endpoint on the account:
             StreamingEndpoint streamingEndpoint = await _azureMediaServicesClient.StreamingEndpoints.GetAsync(_config.ResourceGroup, _config.AccountName, streamingEndpointName);
 
-            // If it's running, Stop it. 
+            // If it's running, stop it:
             if (streamingEndpoint.ResourceState == StreamingEndpointResourceState.Running)
             {
                 Console.WriteLine("Streaming Endpoint was running, stopping now...");
