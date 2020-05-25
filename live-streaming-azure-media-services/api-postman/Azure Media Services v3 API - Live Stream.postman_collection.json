@@ -1,0 +1,1273 @@
+{
+	"info": {
+		"_postman_id": "9f6cd4d7-4f45-40ab-8a1a-083abea90539",
+		"name": "Azure Media Services v3 API - Live Stream",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Azure AD Token for Service Principal Authentication",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "918d9ee6-abde-46da-a69d-50fe98ef9fb5",
+						"exec": [
+							"var json = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"AccessToken\", json.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Keep-Alive",
+						"value": "true"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"description": "This is always set to client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{aadClientId}}",
+							"description": "The Client ID for your AAD application",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{aadClientSecret}}",
+							"description": "The Client Secret (key) for your AAD application Service principal. This is URL Encoded on the wire.",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "https://management.core.windows.net/",
+							"description": "Normally this is https://management.core.windows.net/ \nIt can vary based on the specific Azure Cloud you are using. \nFor Gov Cloud, China, Germany or other soverign cloud, please check the appropriate Azure management API endpoint URL settings in the documentation. ",
+							"type": "text"
+						}
+					],
+					"options": {
+						"urlencoded": {}
+					}
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/:aadTenantDomain/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						":aadTenantDomain",
+						"oauth2",
+						"token"
+					],
+					"variable": [
+						{
+							"id": "4910309c-cb41-45c5-8091-e7e974dafeff",
+							"key": "aadTenantDomain",
+							"value": "{{aadTenantDomain}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Live Event - Async (pass-through)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cce37f5f-a036-4067-bafc-29921b93b42b",
+						"exec": [
+							"// This is an async operation so we expect a 202 Accepted response",
+							"pm.test(\"Status code is 202 Accepted. Check the Header Azure-AsyncOperation and call the value for status polling\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"// Check that we have an Azure-Async Operation header ",
+							"pm.test(\"Azure-AsyncOperation Header exists\", function () {",
+							"    pm.response.to.have.header(\"Azure-AsyncOperation\");",
+							"});",
+							"",
+							"",
+							"pm.environment.set(\"Last-Azure-AsyncOperation\", pm.response.headers.get(\"Azure-AsyncOperation\") );"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"location\": \"{{location}}\",\r\n    \"properties\": {\r\n        \"description\": \"Simple Live Event using RTMP with 2-second keyframe interval and no ip restriction\",\r\n        \"vanityUrl\": true,\r\n        \"streamOptions\": [\r\n            \"LowLatency\"\r\n        ],\r\n        \"input\": {\r\n            \"streamingProtocol\": \"RTMP\",\r\n            \"accessToken\": \"3075cc04-62ab-4b37-9a4e-70fdb4521458\",\"keyFrameIntervalDuration\": \"PT2S\",\r\n            \"accessControl\": {\r\n                \"ip\": {\r\n                    \"allow\": [{\r\n                        \"name\": \"AllowAll\",\r\n                        \"address\": \"0.0.0.0\",\r\n                        \"subnetPrefixLength\": 0\r\n                    }]\r\n                }\r\n            }\r\n        },\r\n        \"preview\": {\r\n            \"accessControl\": {\r\n                \"ip\": {\r\n                    \"allow\": [{\r\n                        \"name\": \"AllowAll\",\r\n                        \"address\": \"0.0.0.0\",\r\n                        \"subnetPrefixLength\": 0\r\n                    }]\r\n                }\r\n            }\r\n        },\r\n        \"encoding\": {\r\n            \"encodingType\": \"None\",\r\n            \"presetName\": \"\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName?api-version={{api-version}}&autoStart={{autoStart}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"liveEvents",
+						":liveEventName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						},
+						{
+							"key": "autoStart",
+							"value": "{{autoStart}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "liveEventName",
+							"value": "{{liveEventName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create or update an Asset",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d9a56ccb-73cf-46d8-8157-28767d3406de",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "4f4ce35b-f191-4f73-bde5-73aaeaa1c02b",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"properties\": {\r\n    \"description\": \"A documentary showing the ascent of Mount Logan\",\r\n    \"alternateId\": \"344cb707-e54b-4992-9278-0795dd271459\",\r\n    \"storageAccountName\": \"{{storageAccountName}}\",\r\n    \"container\": \"test-live\"\r\n  }\r\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/assets/:assetName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaServices",
+						":accountName",
+						"assets",
+						":assetName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "assetName",
+							"value": "{{assetName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Streaming Policy (clear)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"properties\": {\r\n    \"noEncryption\": {\r\n      \"enabledProtocols\": {\r\n        \"download\": true,\r\n        \"dash\": true,\r\n        \"hls\": true,\r\n        \"smoothStreaming\": true\r\n      }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/streamingPolicies/:streamingPolicyName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaServices",
+						":accountName",
+						"streamingPolicies",
+						":streamingPolicyName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "streamingPolicyName",
+							"value": "{{streamingPolicyName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Streaming Locator (clear)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"properties\": {\r\n    \"streamingPolicyName\": \"testStreamingPolicy1\",\r\n    \"assetName\": \"testAsset1\",\r\n    \"contentKeys\": [],\r\n    \"filters\": []\r\n }\r\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/streamingLocators/:streamingLocatorName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaServices",
+						":accountName",
+						"streamingLocators",
+						":streamingLocatorName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "streamingLocatorName",
+							"value": "{{streamingLocatorName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create StreamingEndpoint",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"location\": \"{{location}}\",\r\n  \"tags\": {\r\n    \"custom tag 1\": \"value 1\",\r\n    \"custom tag 2\": \"value 2\"\r\n  },\r\n  \"properties\": {\r\n    \"description\": \"test Streaming Endpoint\",\r\n    \"scaleUnits\": 0,\r\n    \"availabilitySetName\": \"availableset\",\r\n    \"accessControl\": {\r\n      \"akamai\": {\r\n        \"akamaiSignatureHeaderAuthenticationKeyList\": [\r\n          {\r\n            \"identifier\": \"id1\",\r\n            \"expiration\": \"2029-12-31T16:00:00-08:00\",\r\n            \"base64Key\": \"dGVzdGlkMQ==\"\r\n          },\r\n          {\r\n            \"identifier\": \"id2\",\r\n            \"expiration\": \"2030-12-31T16:00:00-08:00\",\r\n            \"base64Key\": \"dGVzdGlkMQ==\"\r\n          }\r\n        ]\r\n      },\r\n      \"ip\": {\r\n        \"allow\": [\r\n          {\r\n            \"name\": \"AllowedIp\",\r\n            \"address\": \"0.0.0.0\"\r\n          }\r\n        ]\r\n      }\r\n    },\r\n    \"cdnEnabled\": false\r\n  }\r\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/streamingEndpoints/:streamingEndpointName?api-version={{api-version}}&autoStart={{autoStart}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"streamingEndpoints",
+						":streamingEndpointName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						},
+						{
+							"key": "autoStart",
+							"value": "{{autoStart}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "streamingEndpointName",
+							"value": "{{streamingEndpointName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Live Output",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"properties\": {\r\n        \"description\": \"myOutputAsset\",\r\n        \"assetName\": \"testAsset1\",\r\n        \"archiveWindowLength\": \"PT5M\",\r\n        \"manifestName\": \"testmanifest\",\r\n        \"hls\": {\r\n          \"fragmentsPerTsSegment\": 1\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName/liveOutputs/:liveOutputName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"liveEvents",
+						":liveEventName",
+						"liveOutputs",
+						":liveOutputName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "liveEventName",
+							"value": "{{liveEventName}}",
+							"type": "string"
+						},
+						{
+							"key": "liveOutputName",
+							"value": "{{liveOutputName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Paths",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/streamingLocators/:streamingLocatorName/listPaths?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaServices",
+						":accountName",
+						"streamingLocators",
+						":streamingLocatorName",
+						"listPaths"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "streamingLocatorName",
+							"value": "{{streamingLocatorName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Live Event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"liveEvents",
+						":liveEventName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "liveEventName",
+							"value": "{{liveEventName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stop Live Event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"removeOutputsOnStop\": true\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName/stop?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"liveEvents",
+						":liveEventName",
+						"stop"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "liveEventName",
+							"value": "{{liveEventName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Live Event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/liveEvents/:liveEventName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"liveEvents",
+						":liveEventName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "liveEventName",
+							"value": "{{liveEventName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Streaming Locator",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/streamingLocators/:streamingLocatorName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaServices",
+						":accountName",
+						"streamingLocators",
+						":streamingLocatorName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "streamingLocatorName",
+							"value": "{{streamingLocatorName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete an Asset",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaServices/:accountName/assets/:assetName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaServices",
+						":accountName",
+						"assets",
+						":assetName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"type": "string",
+							"value": "{{subscriptionId}}"
+						},
+						{
+							"key": "resourceGroup",
+							"type": "string",
+							"value": "{{resourceGroup}}"
+						},
+						{
+							"key": "accountName",
+							"type": "string",
+							"value": "{{accountName}}"
+						},
+						{
+							"key": "assetName",
+							"type": "string",
+							"value": "{{assetName}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stop StreamingEndpoint",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/streamingEndpoints/:streamingEndpointName/stop?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"streamingEndpoints",
+						":streamingEndpointName",
+						"stop"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "streamingEndpointName",
+							"value": "{{streamingEndpointName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete StreamingEndpoint",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{AccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://management.azure.com/subscriptions/:subscriptionId/resourceGroups/:resourceGroup/providers/Microsoft.Media/mediaservices/:accountName/streamingEndpoints/:streamingEndpointName?api-version={{api-version}}",
+					"protocol": "https",
+					"host": [
+						"management",
+						"azure",
+						"com"
+					],
+					"path": [
+						"subscriptions",
+						":subscriptionId",
+						"resourceGroups",
+						":resourceGroup",
+						"providers",
+						"Microsoft.Media",
+						"mediaservices",
+						":accountName",
+						"streamingEndpoints",
+						":streamingEndpointName"
+					],
+					"query": [
+						{
+							"key": "api-version",
+							"value": "{{api-version}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "subscriptionId",
+							"value": "{{subscriptionId}}",
+							"type": "string"
+						},
+						{
+							"key": "resourceGroup",
+							"value": "{{resourceGroup}}",
+							"type": "string"
+						},
+						{
+							"key": "accountName",
+							"value": "{{accountName}}",
+							"type": "string"
+						},
+						{
+							"key": "streamingEndpointName",
+							"value": "{{streamingEndpointName}}",
+							"type": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
