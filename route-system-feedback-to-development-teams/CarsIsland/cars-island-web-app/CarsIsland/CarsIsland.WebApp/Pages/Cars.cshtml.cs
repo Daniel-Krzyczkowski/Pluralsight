@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CarsIsland.WebApp.Data;
+﻿using CarsIsland.WebApp.Data;
 using CarsIsland.WebApp.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CarsIsland.WebApp.Pages
 {
@@ -34,7 +34,7 @@ namespace CarsIsland.WebApp.Pages
             else
             {
                 CarsList = await _dbContext.Cars
-                                            .Include(c=>c.Location)
+                                            .Include(c => c.Location)
                                             .ToListAsync();
             }
         }
