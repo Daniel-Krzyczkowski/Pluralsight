@@ -3,10 +3,8 @@ using CarsIsland.WebAPI.Core.DTOs;
 using CarsIsland.WebAPI.Core.Services.Interfaces;
 using CarsIsland.WebAPI.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarsIsland.WebAPI.Core.Services

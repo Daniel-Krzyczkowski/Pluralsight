@@ -1,8 +1,5 @@
 ﻿using CarsIsland.WebAPI.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarsIsland.WebAPI.Data
 {

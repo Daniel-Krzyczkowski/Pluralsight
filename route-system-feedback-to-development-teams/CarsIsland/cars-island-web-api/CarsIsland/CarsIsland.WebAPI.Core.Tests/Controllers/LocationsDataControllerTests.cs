@@ -3,9 +3,7 @@ using CarsIsland.WebAPI.Core.DTOs;
 using CarsIsland.WebAPI.Core.Services.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarsIsland.WebAPI.Core.Tests.Controllers

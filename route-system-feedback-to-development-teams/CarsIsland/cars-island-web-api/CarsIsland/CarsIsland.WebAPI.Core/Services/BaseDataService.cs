@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using CarsIsland.WebAPI.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarsIsland.WebAPI.Core.Services
 {
