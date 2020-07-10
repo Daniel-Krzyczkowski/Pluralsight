@@ -1,3 +1,3 @@
 ![ps-repo.gif](images/ps-repo.gif)
 
-## Repository with source code related with Pluralsight courses.
+## This repository contains samples related to my Pluralsight courses.
