@@ -1,0 +1,31 @@
+﻿@using CarsIsland.WebApp.Data
+@page "/contactus"
+
+<h1>Contact us</h1>
+
+<p>You can contact us using below form. We will answer immediately and try to help:</p>
+
+<EditForm Model="@contactFormModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <b><p>Message topic:</p></b>
+    <InputText id="topic" @bind-Value="contactFormModel.Topic" />
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary">Send</button>
+</EditForm>
+
+@code {
+    private void SendMessage()
+    {
+
+    }
+
+    private ContactFormModel contactFormModel = new ContactFormModel();
+
+    private void HandleValidSubmit()
+    {
+
+    }
+}
