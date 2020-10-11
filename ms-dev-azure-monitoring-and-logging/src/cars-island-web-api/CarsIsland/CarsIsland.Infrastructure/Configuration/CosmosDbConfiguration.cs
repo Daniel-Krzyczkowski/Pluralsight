@@ -7,7 +7,8 @@ namespace CarsIsland.Infrastructure.Configuration
     {
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
-        public string ContainerName { get; set; }
+        public string CarContainerName { get; set; }
+        public string EnquiryContainerName { get; set; }
         public string PartitionKeyPath { get; set; }
     }
 
@@ -20,9 +21,14 @@ namespace CarsIsland.Infrastructure.Configuration
                 return ValidateOptionsResult.Fail($"{nameof(options.ConnectionString)} configuration parameter for the Azure Cosmos DB is required");
             }
 
-            if (string.IsNullOrEmpty(options.ContainerName))
+            if (string.IsNullOrEmpty(options.CarContainerName))
             {
-                return ValidateOptionsResult.Fail($"{nameof(options.ContainerName)} configuration parameter for the Azure Cosmos DB is required");
+                return ValidateOptionsResult.Fail($"{nameof(options.CarContainerName)} configuration parameter for the Azure Cosmos DB is required");
+            }
+
+            if (string.IsNullOrEmpty(options.EnquiryContainerName))
+            {
+                return ValidateOptionsResult.Fail($"{nameof(options.EnquiryContainerName)} configuration parameter for the Azure Cosmos DB is required");
             }
 
             if (string.IsNullOrEmpty(options.DatabaseName))

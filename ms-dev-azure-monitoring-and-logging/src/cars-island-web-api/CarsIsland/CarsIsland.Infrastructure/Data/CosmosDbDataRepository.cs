@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 
 namespace CarsIsland.Infrastructure.Data
 {
-    public class CosmosDbDataRepository<T> : IDataRepository<T> where T : BaseEntity
+    public abstract class CosmosDbDataRepository<T> : IDataRepository<T> where T : BaseEntity
     {
-        private readonly ICosmosDbConfiguration _cosmosDbConfiguration;
-        private readonly CosmosClient _client;
-        private readonly ILogger<CosmosDbDataRepository<T>> _log;
+        protected readonly ICosmosDbConfiguration _cosmosDbConfiguration;
+        protected readonly CosmosClient _client;
+        protected readonly ILogger<CosmosDbDataRepository<T>> _log;
+
+        public abstract string ContainerName { get; }
 
         public CosmosDbDataRepository(ICosmosDbConfiguration cosmosDbConfiguration,
                            CosmosClient client,
@@ -152,7 +154,7 @@ namespace CarsIsland.Infrastructure.Data
         private CosmosContainer GetContainer()
         {
             var database = _client.GetDatabase(_cosmosDbConfiguration.DatabaseName);
-            var container = database.GetContainer(_cosmosDbConfiguration.ContainerName);
+            var container = database.GetContainer(ContainerName);
             return container;
         }
     }

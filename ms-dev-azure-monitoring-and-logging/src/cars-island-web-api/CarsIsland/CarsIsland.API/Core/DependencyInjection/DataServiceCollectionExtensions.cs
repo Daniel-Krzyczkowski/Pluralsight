@@ -15,19 +15,19 @@ namespace CarsIsland.API.Core.DependencyInjection
             var serviceProvider = services.BuildServiceProvider();
 
             var cosmoDbConfiguration = serviceProvider.GetRequiredService<ICosmosDbConfiguration>();
-            CosmosClientOptions cosmosClientOptions = new CosmosClientOptions
-            {
-                SerializerOptions = new CosmosSerializationOptions()
-                {
-                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-                }
-            };
-            CosmosClient cosmosClient = new CosmosClient(cosmoDbConfiguration.ConnectionString, cosmosClientOptions);
+            CosmosClient cosmosClient = new CosmosClient(cosmoDbConfiguration.ConnectionString);
             CosmosDatabase database = cosmosClient.CreateDatabaseIfNotExistsAsync(cosmoDbConfiguration.DatabaseName)
                                                    .GetAwaiter()
                                                    .GetResult();
-            CosmosContainer container = database.CreateContainerIfNotExistsAsync(
-                cosmoDbConfiguration.ContainerName,
+            database.CreateContainerIfNotExistsAsync(
+                cosmoDbConfiguration.CarContainerName,
+                cosmoDbConfiguration.PartitionKeyPath,
+                400)
+                .GetAwaiter()
+                .GetResult();
+
+            database.CreateContainerIfNotExistsAsync(
+                cosmoDbConfiguration.EnquiryContainerName,
                 cosmoDbConfiguration.PartitionKeyPath,
                 400)
                 .GetAwaiter()
@@ -35,8 +35,8 @@ namespace CarsIsland.API.Core.DependencyInjection
 
             services.AddSingleton(cosmosClient);
 
-            services.AddSingleton<IDataRepository<Car>, CosmosDbDataRepository<Car>>();
-            services.AddSingleton<IDataRepository<Enquiry>, CosmosDbDataRepository<Enquiry>>();
+            services.AddSingleton<IDataRepository<Car>, CarRepository>();
+            services.AddSingleton<IDataRepository<Enquiry>, EnquiryRepository>();
 
             return services;
         }

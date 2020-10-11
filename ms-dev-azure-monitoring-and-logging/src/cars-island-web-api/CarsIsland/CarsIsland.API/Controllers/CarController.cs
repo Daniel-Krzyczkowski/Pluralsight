@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CarsIsland.Core.Entities;
+using CarsIsland.Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -10,16 +12,21 @@ namespace CarsIsland.API.Controllers
     public class CarController : ControllerBase
     {
         private readonly ILogger<CarController> _logger;
+        private readonly IDataRepository<Car> _carRepository;
 
-        public CarController(ILogger<CarController> logger)
+        public CarController(ILogger<CarController> logger,
+                             IDataRepository<Car> carRepository)
         {
             _logger = logger;
+            _carRepository = carRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllCars()
         {
-            throw new NotImplementedException();
+            var allCars = await _carRepository.GetAllAsync();
+
+            return Ok(allCars);
         }
     }
 }

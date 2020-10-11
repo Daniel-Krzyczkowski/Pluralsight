@@ -4,7 +4,8 @@
     {
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
-        string ContainerName { get; set; }
+        string CarContainerName { get; set; }
+        string EnquiryContainerName { get; set; }
         string PartitionKeyPath { get; set; }
     }
 }
