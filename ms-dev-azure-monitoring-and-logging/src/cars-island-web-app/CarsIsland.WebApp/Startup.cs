@@ -27,7 +27,7 @@ namespace CarsIsland.WebApp
             services.AddServerSideBlazor();
             services.AddHttpClient<ICarsIslandApiService, CarsIslandApiService>(configureClient =>
             {
-                configureClient.BaseAddress = new Uri("https://localhost:5001");
+                configureClient.BaseAddress = new Uri(Configuration.GetSection("CarsIslandApi:Url").Value);
             });
             services.AddScoped<CarDataService>();
             services.AddScoped<EnquiryDataService>();
