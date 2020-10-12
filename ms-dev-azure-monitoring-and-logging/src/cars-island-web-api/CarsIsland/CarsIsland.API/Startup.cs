@@ -22,7 +22,8 @@ namespace CarsIsland.API
             services.AddAppConfiguration(Configuration)
                     .AddApplicationInsightsTelemetry()
                     .AddDataServices()
-                    .AddStorageServices();
+                    .AddStorageServices()
+                    .AddSwagger();
 
             services.AddControllers();
         }
@@ -36,6 +37,8 @@ namespace CarsIsland.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwaggerServices();
 
             app.UseRouting();
 

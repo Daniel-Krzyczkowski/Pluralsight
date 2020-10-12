@@ -87,9 +87,9 @@ namespace CarsIsland.Infrastructure.Services
             try
             {
                 var container = await GetBlobContainer();
-                var blockBlob = container.GetBlobClient(blobName);
+                var blob = container.GetBlobClient(blobName);
 
-                string blobUrl = blockBlob.Uri.AbsoluteUri;
+                string blobUrl = blob.Uri.AbsoluteUri;
                 return blobUrl;
             }
             catch (RequestFailedException ex)
@@ -99,7 +99,7 @@ namespace CarsIsland.Infrastructure.Services
             }
         }
 
-        public async Task UploadBlobAsync(Stream stream, string blobName)
+        public async Task<string> UploadBlobAsync(Stream stream, string blobName)
         {
             try
             {
@@ -109,6 +109,7 @@ namespace CarsIsland.Infrastructure.Services
 
                 BlobClient blob = container.GetBlobClient(blobName);
                 await blob.UploadAsync(stream);
+                return blob.Uri.AbsoluteUri;
             }
 
             catch (RequestFailedException ex)

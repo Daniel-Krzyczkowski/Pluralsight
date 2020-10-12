@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json.Serialization;
 
-namespace CarsIsland.Core.Entities
+namespace CarsIsland.API.Dto
 {
-    public class Enquiry : BaseEntity
+    public class CustomerEnquiry
     {
         [JsonPropertyName("title")]
         public string Title { get; set; }
@@ -10,7 +11,7 @@ namespace CarsIsland.Core.Entities
         public string Content { get; set; }
         [JsonPropertyName("customerContactEmail")]
         public string CustomerContactEmail { get; set; }
-        [JsonPropertyName("attachmentUrl")]
-        public string AttachmentUrl { get; set; }
+
+        public IFormFile Attachment { get; set; }
     }
 }

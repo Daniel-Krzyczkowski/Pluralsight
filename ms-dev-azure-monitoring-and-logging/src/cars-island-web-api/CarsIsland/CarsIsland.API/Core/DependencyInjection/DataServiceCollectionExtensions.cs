@@ -1,5 +1,4 @@
 ﻿using Azure.Cosmos;
-using Azure.Cosmos.Serialization;
 using CarsIsland.Core.Entities;
 using CarsIsland.Core.Interfaces;
 using CarsIsland.Infrastructure.Configuration.Interfaces;

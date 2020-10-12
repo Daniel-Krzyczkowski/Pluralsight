@@ -2,7 +2,7 @@
 using CarsIsland.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CarsIsland.API.Controllers
@@ -21,6 +21,17 @@ namespace CarsIsland.API.Controllers
             _carRepository = carRepository;
         }
 
+        /// <summary>
+        /// Gets list with available cars for rent
+        /// </summary>
+        /// <returns>
+        /// List with available cars for rent
+        /// </returns> 
+        /// <response code="200">List with cars</response>
+        /// <response code="401">Access denied</response>
+        /// <response code="404">Cars list not found</response>
+        /// <response code="500">Oops! something went wrong</response>
+        [ProducesResponseType(typeof(IReadOnlyList<Car>), 200)]
         [HttpGet("all")]
         public async Task<IActionResult> GetAllCars()
         {
