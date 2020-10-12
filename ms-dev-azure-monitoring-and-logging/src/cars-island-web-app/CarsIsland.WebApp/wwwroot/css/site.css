@@ -187,4 +187,8 @@ app {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+
+    input[type='file'] {
+        color: transparent;
+    }
 }

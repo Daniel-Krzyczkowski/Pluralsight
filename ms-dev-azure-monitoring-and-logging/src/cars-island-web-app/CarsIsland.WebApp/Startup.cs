@@ -1,9 +1,12 @@
 using CarsIsland.WebApp.Data;
+using CarsIsland.WebApp.Services;
+using CarsIsland.WebApp.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CarsIsland.WebApp
 {
@@ -22,7 +25,12 @@ namespace CarsIsland.WebApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<CarDataService>();
+            services.AddHttpClient<ICarsIslandApiService, CarsIslandApiService>(configureClient =>
+            {
+                configureClient.BaseAddress = new Uri("https://localhost:5001");
+            });
+            services.AddScoped<CarDataService>();
+            services.AddScoped<EnquiryDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

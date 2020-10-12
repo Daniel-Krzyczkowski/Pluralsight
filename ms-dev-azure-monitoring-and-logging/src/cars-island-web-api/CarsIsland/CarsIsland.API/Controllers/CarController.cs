@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace CarsIsland.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CarController : ControllerBase
     {
         private readonly ILogger<CarController> _logger;

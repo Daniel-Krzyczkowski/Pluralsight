@@ -19,7 +19,7 @@ else
                 <th>Brand</th>
                 <th>Model</th>
                 <th>Price per day</th>
-                <th>Availability</th>
+                <th>Location</th>
                 <th>Image</th>
             </tr>
         </thead>
@@ -29,9 +29,9 @@ else
             <tr>
                 <td>@car.Brand</td>
                 <td>@car.Model</td>
-                <td>@car.PricePerDay</td>
-                <td>@car.Availability</td>
-                <td><img src= "@car.ImageUrl" asp-append-version="true" width="100px" /></td>
+                <td>@car.PricePerDay$</td>
+                <td>@car.Location</td>
+                <td><img src= "@car.ImageUrl" asp-append-version="true" width="200px" /></td>
             </tr>
             }
         </tbody>
@@ -39,7 +39,7 @@ else
 }
 
 @code {
-    private Car[] cars;
+    private IReadOnlyCollection<Car> cars;
 
     protected override async Task OnInitializedAsync()
     {

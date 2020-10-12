@@ -39,7 +39,7 @@ namespace CarsIsland.API.Controllers
         /// <response code="500">Oops! something went wrong</response>
         [ProducesResponseType(typeof(Enquiry), 200)]
         [HttpPost()]
-        public async Task<IActionResult> AddNewProduct([FromForm] CustomerEnquiry customerEnquiry)
+        public async Task<IActionResult> AddNewEnquiry([FromForm] CustomerEnquiry customerEnquiry)
         {
             string attachmentUrl = string.Empty;
             string fileTempPath = string.Empty;
