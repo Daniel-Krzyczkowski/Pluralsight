@@ -25,6 +25,7 @@ namespace CarsIsland.WebApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddApplicationInsightsTelemetry();
             services.AddHttpClient<ICarsIslandApiService, CarsIslandApiService>(configureClient =>
             {
                 configureClient.BaseAddress = new Uri(Configuration.GetSection("CarsIslandApi:Url").Value);
