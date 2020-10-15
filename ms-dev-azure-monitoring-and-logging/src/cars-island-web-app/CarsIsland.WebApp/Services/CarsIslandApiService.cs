@@ -28,7 +28,10 @@ namespace CarsIsland.WebApp.Services
             multipartContent.Add(new StringContent(enquiry.Title), "title");
             multipartContent.Add(new StringContent(enquiry.Content), "content");
             multipartContent.Add(new StringContent(enquiry.CustomerContactEmail), "customerContactEmail");
-            multipartContent.Add(new StreamContent(enquiry.Attachment), "Attachment", attachmentFileName);
+            if (enquiry.Attachment != null)
+            {
+                multipartContent.Add(new StreamContent(enquiry.Attachment), "Attachment", attachmentFileName);
+            }
             await _httpClient.PostAsync("api/enquiry", multipartContent);
         }
     }
