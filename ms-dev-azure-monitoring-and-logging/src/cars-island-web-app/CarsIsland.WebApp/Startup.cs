@@ -6,7 +6,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Extensions.Http;
 using System;
+using System.Net.Http;
 
 namespace CarsIsland.WebApp
 {
@@ -26,12 +30,36 @@ namespace CarsIsland.WebApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddApplicationInsightsTelemetry();
+
             services.AddHttpClient<ICarsIslandApiService, CarsIslandApiService>(configureClient =>
             {
                 configureClient.BaseAddress = new Uri(Configuration.GetSection("CarsIslandApi:Url").Value);
-            });
+            }).AddPolicyHandler(GetRetryPolicy(services));
+
             services.AddScoped<CarDataService>();
             services.AddScoped<EnquiryDataService>();
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(IServiceCollection services)
+        {
+            return HttpPolicyExtensions
+              // Handle HttpRequestExceptions, 408 and 5xx status codes:
+              .HandleTransientHttpError()
+              // Handle 404 not found
+              .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+              // Retry 3 times, each time wait 2, 4 and 8 seconds before retrying:
+              .WaitAndRetryAsync(new[]
+                {
+                   TimeSpan.FromSeconds(2),
+                   TimeSpan.FromSeconds(4),
+                   TimeSpan.FromSeconds(8)
+                },
+                 onRetry: (outcome, timespan, retryAttempt, context) =>
+                 {
+                     services.BuildServiceProvider()
+                             .GetRequiredService<ILogger<CarsIslandApiService>>()?
+                             .LogWarning("Delaying for {delay}ms, then making retry: {retry}.", timespan.TotalMilliseconds, retryAttempt);
+                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
