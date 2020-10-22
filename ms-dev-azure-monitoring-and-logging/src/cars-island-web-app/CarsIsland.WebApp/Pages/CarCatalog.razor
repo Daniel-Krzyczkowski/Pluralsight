@@ -1,0 +1,48 @@
+﻿@page "/carscatalog"
+
+@using CarsIsland.WebApp.Data
+@inject CarDataService CarDataService
+
+<h1>Available cars catalog</h1>
+
+<p>Here are the cars available in our offer:</p>
+
+@if (cars == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Price per day</th>
+                <th>Location</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in cars)
+            {
+            <tr>
+                <td>@car.Brand</td>
+                <td>@car.Model</td>
+                <td>@car.PricePerDay$</td>
+                <td>@car.Location</td>
+                <td><img src= "@car.ImageUrl" asp-append-version="true" width="200px" /></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IReadOnlyCollection<Car> cars;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cars = await CarDataService.GetCarsAsync();
+    }
+}

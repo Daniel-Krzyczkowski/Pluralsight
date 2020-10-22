@@ -1,0 +1,11 @@
+1. Download Open SSL from the link: https://slproweb.com/products/Win32OpenSSL.html
+2. Install Open SSL
+3. Set system environment variable for Open SSL, open system variables, select "Path" variable and click "Edit" button. Add path to the "bin" folder where Open SSL was installed (like: C:\Program Files\OpenSSL-Win64\bin)
+3. Open command line
+4. Type: SET pwd=Test1234@
+5. Type: SET pfxFilePath= C:\github\pluralsight-repo\ms-dev-azure-monitoring-and-logging\cert\selfsigncert.pfx
+6. openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout privateKey.key -out selfsigncert.crt -subj /CN=localhost
+7. openssl pkcs12 -export -out %pfxFilePath% -inkey privateKey.key -in selfsigncert.crt -password pass:%pwd%
+8. openssl pkcs12 -in selfsigncert.pfx -out selfsigncert.pem -nodes
+9. Type certificate password again.
+10. pem certificate file should be created in the same directory

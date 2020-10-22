@@ -1,0 +1,60 @@
+﻿@page "/contactus"
+@using CarsIsland.WebApp.Data
+@using BlazorInputFile
+@inject EnquiryDataService EnquiryDataService
+
+<h1>Contact us</h1>
+
+<p>You can contact us using below form. We will answer immediately and try to help:</p>
+
+<EditForm Model="@contactFormModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <b><p>Message title:</p></b>
+    <InputText id="topic" @bind-Value="contactFormModel.Title" />
+    <br />
+    <br />
+    <b><p>Message content:</p></b>
+    <InputText id="topic" @bind-Value="contactFormModel.Content" />
+    <br />
+    <br />
+    <b><p>Contact email:</p></b>
+    <InputText id="topic" @bind-Value="contactFormModel.CustomerContactEmail" />
+    <br />
+    <br />
+    <InputFile OnChange="HandleFileSelected" />
+    <br />
+    <br />
+    <p>File name: @contactFormModel.AttachmentFileName</p>
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary">Send</button>
+    <br />
+    @if(@showConfirmation)
+    {
+     <p><b>Thank you. We have received your enquiry and we will response as soon as possible</b></p>
+    }
+
+</EditForm>
+
+@code {
+
+    private bool showConfirmation = false;
+    private ContactFormModel contactFormModel = new ContactFormModel();
+
+    private async Task HandleValidSubmit()
+    {
+        await EnquiryDataService.SendEnquiryAsync(contactFormModel.AttachmentFileName, contactFormModel);
+        contactFormModel.Title = string.Empty;
+        contactFormModel.Content = string.Empty;
+        contactFormModel.CustomerContactEmail = string.Empty;
+        showConfirmation = true;
+    }
+
+    private void HandleFileSelected(IFileListEntry[] files)
+    {
+        contactFormModel.Attachment = files.First().Data;
+        contactFormModel.AttachmentFileName = files.First().Name;
+    }
+}
