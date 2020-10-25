@@ -36,7 +36,6 @@ namespace CarsIsland.API.Controllers
         public async Task<IActionResult> GetAllCars()
         {
             var allCars = await _carRepository.GetAllAsync();
-
             return Ok(allCars);
         }
     }

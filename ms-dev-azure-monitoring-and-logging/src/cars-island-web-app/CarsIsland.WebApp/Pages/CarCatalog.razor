@@ -10,6 +10,10 @@
 @if (cars == null)
 {
     <p><em>Loading...</em></p>
+    @if (showAdditionalLoadingInformation)
+    {
+        <p><b>@serverUnavailableInformation</b></p>
+    }
 }
 else
 {
@@ -26,13 +30,13 @@ else
         <tbody>
             @foreach (var car in cars)
             {
-            <tr>
-                <td>@car.Brand</td>
-                <td>@car.Model</td>
-                <td>@car.PricePerDay$</td>
-                <td>@car.Location</td>
-                <td><img src= "@car.ImageUrl" asp-append-version="true" width="200px" /></td>
-            </tr>
+                <tr>
+                    <td>@car.Brand</td>
+                    <td>@car.Model</td>
+                    <td>@car.PricePerDay$</td>
+                    <td>@car.Location</td>
+                    <td><img src="@car.ImageUrl" asp-append-version="true" width="200px" /></td>
+                </tr>
             }
         </tbody>
     </table>
@@ -40,9 +44,27 @@ else
 
 @code {
     private IReadOnlyCollection<Car> cars;
+    private bool showAdditionalLoadingInformation = false;
+    private string serverUnavailableInformation = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        cars = await CarDataService.GetCarsAsync();
+        try
+        {
+            cars = await CarDataService.GetCarsAsync();
+            showAdditionalLoadingInformation = false;
+        }
+
+        catch (ApplicationException)
+        {
+            serverUnavailableInformation = "We cannot get cars from the server. Please try again";
+            showAdditionalLoadingInformation = true;
+        }
+
+        catch (Polly.CircuitBreaker.BrokenCircuitException)
+        {
+            serverUnavailableInformation = "Server is busy... Please wait, we will try to send the request again soon...";
+            showAdditionalLoadingInformation = true;
+        }
     }
 }

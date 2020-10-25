@@ -34,7 +34,10 @@ namespace CarsIsland.WebApp
             services.AddHttpClient<ICarsIslandApiService, CarsIslandApiService>(configureClient =>
             {
                 configureClient.BaseAddress = new Uri(Configuration.GetSection("CarsIslandApi:Url").Value);
-            }).AddPolicyHandler(GetRetryPolicy(services));
+            })
+            .AddPolicyHandler(GetRetryPolicy(services))
+            .AddPolicyHandler(GetCircuitBreakerPolicy(services));
+
 
             services.AddScoped<CarDataService>();
             services.AddScoped<EnquiryDataService>();
@@ -58,8 +61,34 @@ namespace CarsIsland.WebApp
                  {
                      services.BuildServiceProvider()
                              .GetRequiredService<ILogger<CarsIslandApiService>>()?
-                             .LogWarning("Delaying for {delay}ms, then making retry: {retry}.", timespan.TotalMilliseconds, retryAttempt);
+                             .LogError("Delaying for {delay}ms, then making retry: {retry}.", timespan.TotalMilliseconds, retryAttempt);
                  });
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy(IServiceCollection services)
+        {
+            return HttpPolicyExtensions
+              // Handle HttpRequestExceptions, 408 and 5xx status codes:
+              .HandleTransientHttpError()
+              .CircuitBreakerAsync(3, TimeSpan.FromSeconds(10),
+              onBreak:(result, timeSpan, context) =>
+              {
+                  services.BuildServiceProvider()
+                              .GetRequiredService<ILogger<CarsIslandApiService>>()?
+                              .LogError("CircuitBreaker onBreak for {delay}ms", timeSpan.TotalMilliseconds);
+              },
+              onReset: context =>
+              {
+                 services.BuildServiceProvider()
+                              .GetRequiredService<ILogger<CarsIslandApiService>>()?
+                              .LogError("CircuitBreaker closed again"); 
+              },
+              onHalfOpen: () =>
+              {
+                  services.BuildServiceProvider()
+                              .GetRequiredService<ILogger<CarsIslandApiService>>()?
+                              .LogError("CircuitBreaker onHalfOpen");
+              });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
