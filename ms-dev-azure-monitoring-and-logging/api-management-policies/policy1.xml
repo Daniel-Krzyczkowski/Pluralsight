@@ -1,0 +1,17 @@
+<policies>
+    <inbound>
+        <cache-lookup vary-by-developer="false" vary-by-developer-groups="false"
+                      caching-type="internal" />
+        <base />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <cache-store duration="60" />
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

@@ -1,0 +1,15 @@
+<policies>
+    <inbound>
+        <rate-limit calls="5" renewal-period="10" />
+        <base />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>
