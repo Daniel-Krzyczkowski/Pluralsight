@@ -1,0 +1,42 @@
+
+jobs:
+  - job: 'Build'
+    displayName: "Build Cars Island Web API"
+    pool:
+      vmImage: 'VS2017-Win2016'
+    steps:
+    
+    - task: DotNetCoreCLI@2
+      displayName: Restore NuGet packages
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+      
+    - task: DotNetCoreCLI@2
+      displayName: Build project
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: Publish project
+      inputs:
+        command: publish
+        arguments: '--configuration Release --output publish_output'
+        projects: '**/*.csproj'
+        publishWebProjects: false
+        modifyOutputPath: false
+        zipAfterPublish: false
+
+    - task: ArchiveFiles@2
+      displayName: Archive project files
+      inputs:
+        rootFolderOrFile: "$(System.DefaultWorkingDirectory)/publish_output"
+        includeRootFolder: false
+        archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
+      
+    - task: PublishBuildArtifacts@1
+      displayName: Publish package ready for deployment
+      inputs:
+        PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+        artifactName: 'drop'

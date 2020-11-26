@@ -1,0 +1,50 @@
+trigger:
+- master
+
+stages:
+- stage: Build
+  displayName: 'Build Cars Island Web API'
+  jobs:
+  - template: azure-pipelines-build-template.yml
+
+- stage: DeployDEV
+  displayName: 'Deploy Web API to DEV environment'
+  condition: succeeded()
+  dependsOn: Build
+  variables:
+  - group: 'cars-island-apps-dev-env-variable-group'
+  jobs:
+  - template: azure-pipelines-deployment-template.yml
+    parameters:
+      azureConnectionName: '$(azureResourceManagerConnectionName)'
+      webAppName: '$(webApiName)'
+      resourceGroupName: '$(resourceGroupName)'
+      environment: 'DEV'
+
+- stage: DeployTEST
+  displayName: 'Deploy Web API to TEST environment'
+  condition: succeeded()
+  dependsOn: Build
+  variables:
+  - group: 'cars-island-apps-test-env-variable-group'
+  jobs:
+  - template: azure-pipelines-deployment-template.yml
+    parameters:
+      azureConnectionName: '$(azureResourceManagerConnectionName)'
+      webAppName: '$(webApiName)'
+      resourceGroupName: '$(resourceGroupName)'
+      environment: 'TEST'
+
+- stage: DeployPROD
+  displayName: 'Deploy Web API to PROD environment'
+  condition: succeeded()
+  dependsOn: Build
+  variables:
+  - group: 'cars-island-apps-prod-env-variable-group'
+  jobs:
+  - template: azure-pipelines-deployment-template.yml
+    parameters:
+      azureConnectionName: '$(azureResourceManagerConnectionName)'
+      webAppName: '$(webApiName)'
+      resourceGroupName: '$(resourceGroupName)'
+      environment: 'PROD'
